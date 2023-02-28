@@ -1,0 +1,14 @@
+import include
+from django.contrib import admin
+from django.urls import path
+from . import views
+
+urlpatterns = [
+     path('', views.index, name='index'),
+     path('register', views.register, name='register'),
+     path('logout', views.logout, name='logout'),
+     path('book', views.book, name='book'),
+     path('category/<int:id>', views.showcategory, name='category'),
+     
+]
+

@@ -1,0 +1,112 @@
+{% load static %}
+<!--
+Author: W3layouts
+Author URL: http://w3layouts.com
+-->
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <title>Login Here!!</title>
+    <!-- Meta tag Keywords -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8" />
+    <meta name="keywords"
+        content="Report Login Form Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+    <!-- //Meta tag Keywords -->
+    <link href="//fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!--/Style-CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" media="all" />
+    <!--//Style-CSS -->
+
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" type="text/css" media="all">
+
+    <script>
+        function bodyread(){
+            // Create a new instance of SpeechSynthesisUtterance
+            var utterance = new SpeechSynthesisUtterance();
+
+            // Set the text to be spoken to the full content of the webpage
+            utterance.text = document.body.textContent;
+
+            // Set the language of the voice
+            utterance.lang = 'en-US';
+
+            // Start speaking the text
+            window.speechSynthesis.speak(utterance);
+        }
+        function speechusername() {
+            if (window.hasOwnProperty('webkitSpeechRecognition')) {
+                var recognition = new webkitSpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.lang = "en-US";
+                recognition.start();
+                recognition.onresult = function(e) {
+                document.getElementById('username').value = e.results[0][0].transcript;
+                recognition.stop();
+                };
+                recognition.onerror = function(e) {
+                recognition.stop();
+                }
+            }
+            }
+        function speechpassword() {
+            if (window.hasOwnProperty('webkitSpeechRecognition')) {
+                var recognition = new webkitSpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.lang = "en-US";
+                recognition.start();
+                recognition.onresult = function(e) {
+                document.getElementById('password').value = e.results[0][0].transcript;
+                recognition.stop();
+                };
+                recognition.onerror = function(e) {
+                recognition.stop();
+                }
+            }
+        }
+      </script>
+
+</head>
+
+<body onfocus="bodyread()">
+
+    <!-- form section start -->
+    <section class="w3l-hotair-form">
+        <h1>Login Here!!!</h1>
+        <div class="container">
+            <!-- /form -->
+            <div class="workinghny-form-grid">
+                <div class="main-hotair">
+                    <div class="content-wthree">
+                        <h2>Log In</h2>
+                        <form action="{% url 'index' %}" method="post">
+                            {% csrf_token %}
+                            <input type="text" id="username" class="text" name="uname" placeholder="User Name" onclick="speechusername()">
+                            <input type="text" id="password" class="password" name="password" placeholder="User Password" onclick="speechpassword()" >
+                            <button class="btn" type="submit">Log In</button>
+                        </form>
+                        
+                        <p class="account">Don't have an account? <a href="{% url 'register' %}">Register</a></p>
+                    </div>
+                    <div class="w3l_form align-self">
+                        <div class="left_grid_info">
+                            <img src="{% static 'images/1.png' %}" alt="" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- //form -->
+        </div>
+        <!-- copyright-->
+       
+        <!-- //copyright-->
+    </section>
+    <!-- //form section start -->
+
+
+</body>
+
+</html>

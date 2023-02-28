@@ -1,0 +1,228 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="{% static 'css/styleb.css.css' %}"/>
+    <title>Book Store</title>
+    <script>
+    function bodyread(){
+      // Create a new instance of SpeechSynthesisUtterance
+      var utterance = new SpeechSynthesisUtterance();
+
+      // Set the text to be spoken to the full content of the webpage
+      utterance.text = document.body.textContent;
+
+      // Set the language of the voice
+      utterance.lang = 'en-US';
+
+      // Start speaking the text
+      window.speechSynthesis.speak(utterance);
+  }
+  </script>
+  </head>
+  <bod onfocus="bodyread()">
+    <!-- begin header section  -->
+    <header class="header">
+      <main class="header-1">
+        <a href="#" class="logo"> <i class="fas fa-book"></i>AUDIO BOOK STORE</a>
+        <form action="" class="search-form">
+          <input
+            type="search"
+            class="search-box"
+            placeholder="search for...."
+          />
+          <label for="search-box" class="fas fa-search"></label>
+        </form>
+      
+      </main>
+      <main class="header-2">
+        <nav class="nav-bar">
+          <a href="#home">Home</a>
+          <a href="#featured">Books</a>
+          <a href="#arrivals">categories</a>
+
+          <!-- <select name="subject" multiple>
+            <option >Math</option>
+            <option >English</option>
+            <option >Science</option>
+            <option >Biology</option>
+            </select> -->
+            
+          
+          
+          {% if user.is_authenticated %}
+
+          <a href="{% url 'logout' %}">Logout</a>
+          
+          <a style="color: #fff;">Welcome Back {{request.user.username}}</a>
+          {% else %}
+        </nav>
+        {% endif %}
+      </main>
+    </header>
+    <!-- end header section -->
+
+    <!-- footer begin -->
+    <div class="aside">
+      <a href="#home" class="fas fa-home"></a>
+      <a href="#featured" class="fas fa-list"></a>
+      <a href="#arrivals" class="fas fa-tags"></a>
+      <a href="#reviews" class="fas fa-comments"></a>
+      <a href="#blogs" class="fas fa-blogs"></a>
+    </div>
+    <!-- footer end -->
+    
+    <!-- home section begin  -->
+    <section id="home" class="section home">
+      <main class="row">
+        <div class="content">
+          <h3>IRIS World of Books</h3>
+          <p>
+            A book is a garden, an orchard, a storehouse, a party, a company by the way, a counselor, a multitude of counselors.
+          </p>
+         
+        </div>
+        <div class="swiper books-slider">
+          <div class="swiper-wrapper">
+            <a href="#" class="swiper-slide"
+              ><img src="{% static 'images/book-1.png' %}" alt="book"
+            /></a>
+            <a href="#" class="swiper-slide"
+              ><img src="{% static 'images/book-2.png' %}" alt="book"
+            /></a>
+            <a href="#" class="swiper-slide"
+              ><img src="{% static 'images/book3.png' %}" alt="book"
+            /></a>
+            <a href="#" class="swiper-slide"
+              ><img src="{% static 'images/book-4.png' %}" alt="book"
+            /></a>
+            <a href="#" class="swiper-slide"
+              ><img src="{% static 'images/book-5.png' %}" alt="book"
+            /></a>
+            <a href="#" class="swiper-slide"
+              ><img src="{% static 'images/book-6.png' %}" alt="book"
+            /></a>
+          </div>
+          <img src="{% static 'images/stand.png' %}" class="stand" alt="stand" />
+        </div>
+      </main>
+    </section>
+    <!-- home section end  -->
+   
+
+    <!-- section featured begin  -->
+    <section class="featured" id="featured" >
+      <h1 class="heading"><span>Audible Books</span></h1>
+      <div class="swiper featured-slider" style="display: flex;">
+        {% for i in cat %}
+        {% for i in obj %}
+        <div class="swiper-slide box">
+            <!-- <div class="icons">
+              <a href="#" class="fas fa-star"></a>
+              <a href="#" class="fas fa-heart"></a>
+              <a href="#" class="fas fa-shopping-cart"></a>
+            </div> -->
+            <div class="image">
+              <img src="{{i.img.url}}"/>
+            </div>
+            <div class="content">
+              <h3>{{i.name}}</h3>
+              <div class="price">{{i.author}}</div>
+              <div class ="content"></div><b><a href="{% url 'category' j.id %}" class="category btn">{{j.genre}}</a></b></div>
+              {% if product %}
+
+              {% for i in product %}
+              <audio controls>
+                <source src="{{i.audio.url}}" type="audio/ogg" id="{{i.name}}">
+                <!-- <source src="{{i.audio.url}}" type="audio/mpeg"> -->
+                </audio>
+                <button onclick="play()">Play</button>
+                <button onclick="pause()">Pause</button>
+                <button onclick="stop()">Stop</button>
+                <button onclick="resume()">Resume</button>
+                
+                <script>
+                  var audio = document.querySelector("audio");
+                
+                  function play(e) {
+                    // audio.play();
+                    var v=document.getElementById(e);
+                    v.play();
+                  }
+                
+                  function pause() {
+                    audio.pause();
+                  }
+                
+                  function stop() {
+                    audio.pause();
+                    audio.currentTime = 0;
+                  }
+                
+                  function resume() {
+                    audio.play();
+                  }
+                </script>
+           
+              <!-- <a href="#" class="btn">add to cart</a> -->
+            </div>
+          </div>
+          
+          {% endif %}
+          
+          {% endfor %}
+        <!-- {% for i in obj %}
+       
+        <div class="swiper-wrapper">
+            <div class="swiper-slide box">
+                <div class="icons">
+                  
+                 
+                  
+                </div>
+                <div class="image">
+                  <img src="{{i.img.url}}" alt="book" />
+                </div>
+                <div class="content">
+                  <h3>{{i.name}}</i></h3>
+                  <div class="price">{{i.author}}</div>
+                  <div class="price">{{i.genre}}</div>
+                  <audio controls>
+                    <source src="{{i.audio.url}}" type="audio/ogg">
+                    <source src="{{i.audio.url}}" type="audio/mpeg">
+                    </audio>
+                </div>
+              </div>
+
+        
+          
+        </div>
+        {% endfor %} -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+      </div>
+    </section>
+
+    
+    <!-- section featured end  -->
+
+
+
+  
+
+    
+    
+    <!-- loader begin -->
+    <div class="loader-container">
+      <img src="{% static 'images/loader2.gif' %}" alt="loader">
+    </div>
+      <!-- loader end -->
+    <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+    <script src="{% static 'js/index.js' %}"></script>
+  </body>
+</html>

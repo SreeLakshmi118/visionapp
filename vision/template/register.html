@@ -1,0 +1,145 @@
+{% load static %}
+<!--
+Author: W3layouts
+Author URL: http://w3layouts.com
+-->
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <title>Register Here!!</title>
+    <!-- Meta tag Keywords -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8" />
+    <meta name="keywords"
+        content="Report Login Form Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+    <!-- //Meta tag Keywords -->
+    <link href="//fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!--/Style-CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" media="all" />
+    <!--//Style-CSS -->
+
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" type="text/css" media="all">
+
+
+    <script>
+        function bodyread(){
+            // Create a new instance of SpeechSynthesisUtterance
+            var utterance = new SpeechSynthesisUtterance();
+
+            // Set the text to be spoken to the full content of the webpage
+            utterance.text = document.body.textContent;
+
+            // Set the language of the voice
+            utterance.lang = 'en-US';
+
+            // Start speaking the text
+            window.speechSynthesis.speak(utterance);
+        }
+        
+        function speechusername() {
+            if (window.hasOwnProperty('webkitSpeechRecognition')) {
+                var recognition = new webkitSpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.lang = "en-US";
+                recognition.start();
+                recognition.onresult = function(e) {
+                document.getElementById('username').value = e.results[0][0].transcript;
+                recognition.stop();
+                };
+                recognition.onerror = function(e) {
+                recognition.stop();
+                }
+            }
+            }
+        function speechpassword() {
+            if (window.hasOwnProperty('webkitSpeechRecognition')) {
+                var recognition = new webkitSpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.lang = "en-US";
+                recognition.start();
+                recognition.onresult = function(e) {
+                document.getElementById('password').value = e.results[0][0].transcript;
+                recognition.stop();
+                };
+                recognition.onerror = function(e) {
+                recognition.stop();
+                }
+            }
+        }
+
+        function speechconfirmpassword() {
+            if (window.hasOwnProperty('webkitSpeechRecognition')) {
+                var recognition = new webkitSpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.lang = "en-US";
+                recognition.start();
+                recognition.onresult = function(e) {
+                document.getElementById('confirmpassword').value = e.results[0][0].transcript;
+                recognition.stop();
+                };
+                recognition.onerror = function(e) {
+                recognition.stop();
+                }
+            }
+        }
+      </script>
+
+</head>
+
+<body onfocus="bodyread()">
+
+
+
+    <!-- form section start -->
+    <section class="w3l-hotair-form">
+        <h1>Register Here!!!</h1>
+        <div class="container">
+            <!-- /form -->
+            <div class="workinghny-form-grid">
+                <div class="main-hotair">
+                    <div class="content-wthree">
+                        <h2>Register!!</h2>
+                        {% include 'alerts.html' %}
+                        <form action="register" method="post">
+                            {% csrf_token %}
+                            <input type="text" class="text" name="uname" placeholder="User Name" id="username" onclick="speechusername()">
+                            <input type="password" class="password" name="password" placeholder="User Password" id="password" onclick="speechpassword()">
+                            <input type="password" class="password" name="cpassword" placeholder="confirm Password" id="confirmpassword" onclick="speechconfirmpassword()">
+                            <button class="btn" type="submit">Register</button>
+                        </form>
+                        
+                        <p class="account">Already have an account? <a href="{% url 'index' %}">Login</a></p>
+                    </div>
+                    <div class="w3l_form align-self">
+                        <div class="left_grid_info">
+                            <img src="{% static 'images/1.png' %}" alt="" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- //form -->
+        </div>
+        <!-- copyright-->
+       
+        <!-- //copyright-->
+    </section>
+    {% if messages %}
+
+    {% for message in messages %}
+
+    <div class="alert alert-danger" role="alert">
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <!-- //form section start -->
+    
+
+</body>
+
+</html>
