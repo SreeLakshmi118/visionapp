@@ -40,7 +40,7 @@ def logout(request):
     auth.logout(request)
     return redirect('index')
 
-# @login_required(login_url='index')
+@login_required(login_url='index')
  
 def book(request):
     request.session['gen']=None
