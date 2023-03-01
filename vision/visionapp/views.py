@@ -1,7 +1,7 @@
 from django.contrib import messages, auth
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
-from . models import Read, ReadGenre
+from . models import Reads, ReadGenre, language
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 def index(request):
@@ -40,32 +40,55 @@ def logout(request):
     auth.logout(request)
     return redirect('index')
 
-@login_required(login_url='index')
+# @login_required(login_url='index')
+ 
 def book(request):
-    obj=Read.objects.all()
-    context={'obj':obj}
-    for i in obj:
-        print(i.name)
+    request.session['gen']=None
+    request.session['lan']=None
+    obj=Reads.objects.all()
+    gen=ReadGenre.objects.all()
+    lan=language.objects.all()
+    context={
+        'obj':obj,
+        'gen':gen,
+        'lan':lan,
+    }
     return render(request, 'book.html', context)
 
-def book (request):
-    obj=Read.objects.all()
-    cat=ReadGenre.objects.all()
-    context={'obj':obj,'cat':cat}
-    for i in obj:
-        print(i.name)
+def gencust(request, id):
+    request.session['gen']=id
+    if request.session['gen'] and request.session['lan']:
+        obj=Reads.objects.filter(genre=id, language=request.session['lan'])
+    else:
+        obj=Reads.objects.filter(genre=id)
+    gen=ReadGenre.objects.all()
+    lan=language.objects.all()
+    context={
+        'obj':obj,
+        'gen':gen,
+        'lan':lan,
+    }
+    return render(request, 'book.html', context)
+
+def langcust(request, id):
+    request.session['lan']=id
+    if request.session['gen'] and request.session['lan']:
+        obj=Reads.objects.filter(genre=request.session['gen'], language=id)
+    else:
+        obj=Reads.objects.filter(language=id)
+    gen=ReadGenre.objects.all()
+    lan=language.objects.all()
+    context={
+        'obj':obj,
+        'gen':gen,
+        'lan':lan,
+    }
     return render(request, 'book.html', context)
 
 
 
-def showcategory(request):
-    categories = Read.objects.all()
-    cat=ReadGenre.objects.all()
-    cats= Read.onjects.filter(genre_id=id)
-    context={'cat':categories,
-              'cat':cat,
-              'cats':cats}
-    return render(request, 'book.html', context)
+
+
 
 
 

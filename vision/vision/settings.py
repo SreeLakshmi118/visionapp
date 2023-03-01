@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'vision.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME':'demo',
+        'NAME':'visionapp',
         'USER':'postgres',
         'PASSWORD':'root',
         'HOST':'127.0.0.1',

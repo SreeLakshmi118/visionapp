@@ -1,19 +1,19 @@
 from django.contrib import admin
 
-from .models import Read, ReadGenre
+from .models import Reads,ReadGenre,language
 # Register your models here.
 # admin.site.register(Read)
 
 
-class ReadAdmin(admin.ModelAdmin):
+class ReadsAdmin(admin.ModelAdmin):
      list_display = ['name']
-admin.site.register(Read, ReadAdmin)
+admin.site.register(Reads, ReadsAdmin)
 
 class ReadGenreAdmin(admin.ModelAdmin):
      list_display = ['genre']
 admin.site.register(ReadGenre, ReadGenreAdmin)
 
-# class languageAdmin(admin.ModelAdmin):
-#      list_display = ['language']
-# admin.site.register(language, languageAdmin)
+class languageAdmin(admin.ModelAdmin):
+     list_display = ['language']
+admin.site.register(language, languageAdmin)
 

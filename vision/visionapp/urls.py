@@ -8,7 +8,8 @@ urlpatterns = [
      path('register', views.register, name='register'),
      path('logout', views.logout, name='logout'),
      path('book', views.book, name='book'),
-     path('category/<int:id>', views.showcategory, name='category'),
-     
+     path('book/<int:id>', views.gencust, name='gencustomize'),
+     path('book/<int:id>', views.langcust, name='langcustomize'),
+   
 ]
 
