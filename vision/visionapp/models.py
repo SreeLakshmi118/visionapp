@@ -7,7 +7,7 @@ class Reads(models.Model):
     img = models.ImageField(upload_to='images/' ,unique=True)
     language = models.ForeignKey('language', on_delete=models.CASCADE)
     genre = models.ForeignKey('ReadGenre', on_delete=models.CASCADE)
-    audio = models.FileField(upload_to='audio/' ,unique=True)
+    audio = models.FileField(upload_to='audio/' ,unique=True ,max_length=500)
 
     is_active = models.BooleanField(default=True)
     def __str__(self):
@@ -29,3 +29,6 @@ class language(models.Model):
     
     def __str__(self):
         return self.language
+    
+    class Meta:
+        default_permissions = ()

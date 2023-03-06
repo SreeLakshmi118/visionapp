@@ -25,7 +25,7 @@
   }
   </script>
   </head>
-  <body onfocus="bodyread()">
+  <body>
     <!-- begin header section  -->
     <header class="header">
       <main class="header-1">
@@ -143,18 +143,19 @@
         </section>
 
         
-        <section class="reviews" id="reviews">
+         <section class="reviews" id="reviews">
           <h1 class="heading reviews-heading"><span>FIND YOUR LANGUAGE</span></h1>
     
           <div class="swiper reviews-slider">
             <div class="swiper-wrapper">
-              {% for i in lan %}
-              <a href="{% url 'langcustomize' i.id %}">
+              {% for j in lan %}
+              <a href="{% url 'langcustomize' j.id %}">
+             
                 <div class="swiper-slide box">
-                  <img src="{{i.langimg.url}}" alt="" />
-                  <h3>{{i.language}}</h3>
+                  <img src="{{j.langimg.url}}" alt="" />
+                  <h3>{{j.language}}</h3>
                   <p>
-                    {{i.langdesc}}
+                    {{j.langdesc}}
                   </p>
                   
                 </div>
@@ -164,7 +165,7 @@
               </div>
             </div>
           </div>
-        </section>
+        </section> 
     
         <!-- reviews section ends -->
    
@@ -174,7 +175,8 @@
       <h1 class="heading"><span>Audible Books</span></h1>
       <div class="swiper featured-slider" style="display: flex;">
       
-        {% for i in obj %}
+       
+        {% for s in obj %}
         <div class="swiper-slide box">
             <!-- <div class="icons">
               <a href="#" class="fas fa-star"></a>
@@ -182,40 +184,37 @@
               <a href="#" class="fas fa-shopping-cart"></a>
             </div> -->
             <div class="image">
-              <img style="height: 200px;" src="{{i.img.url}}"/>
+              <img style="height: 200px;" src="{{s.img.url}}"/>
             </div>
             <div class="content">
-              <h3>{{i.name}}</h3>
-              <div class="price">{{i.author}}</div>
+              <h3>{{s.name}}</h3>
+              <div class="price">{{s.author}}</div>
               
-              <audio controls>
-                <source src="{{i.audio.url}}" type="audio/ogg">
+              <audio id="{{s.id}}" controls>
+                <source  src="{{s.audio.url}}" type="audio/ogg">
                 <!-- <source src="{{i.audio.url}}" type="audio/mpeg"> -->
                 </audio>
-                <button onclick="play()">Play</button>
-                <button onclick="pause()">Pause</button>
-                <button onclick="stop()">Stop</button>
-                <button onclick="resume()">Resume</button>
+                <button onclick="play('{{s.id}}')">Play</button>
+                <button onclick="pause('{{s.id}}')">Pause</button>
+                <button onclick="stop('{{s.id}}')">Stop</button>
+                <button onclick="resume('{{s.id}}')">Resume</button>
                 
                 <script>
-                  var audio = document.querySelector("audio");
-                
-                  function play(e) {
+                  function play(id){
+                    var audio = document.getElementById(id);
                     audio.play();
-                    // var v=document.getElementById();
-                    v.play();
                   }
-                
-                  function pause() {
+                  function pause(id){
+                    var audio = document.getElementById(id);
                     audio.pause();
                   }
-                
-                  function stop() {
+                  function stop(id){
+                    var audio = document.getElementById(id);
                     audio.pause();
                     audio.currentTime = 0;
                   }
-                
-                  function resume() {
+                  function resume(id){
+                    var audio = document.getElementById(id);
                     audio.play();
                   }
                 </script>

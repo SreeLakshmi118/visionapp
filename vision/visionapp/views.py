@@ -55,12 +55,13 @@ def book(request):
     }
     return render(request, 'book.html', context)
 
-def gencust(request, id):
-    request.session['gen']=id
+def gencust(request, id1):
+    request.session['gen']=id1
+    print(request.session['gen'])
     if request.session['gen'] and request.session['lan']:
-        obj=Reads.objects.filter(genre=id, language=request.session['lan'])
+        obj=Reads.objects.filter(genre=id1, language=request.session['lan'])
     else:
-        obj=Reads.objects.filter(genre=id)
+        obj=Reads.objects.filter(genre=id1)
     gen=ReadGenre.objects.all()
     lan=language.objects.all()
     context={
@@ -70,12 +71,14 @@ def gencust(request, id):
     }
     return render(request, 'book.html', context)
 
-def langcust(request, id):
-    request.session['lan']=id
+def langcust(request, id2):
+    request.session['lan']=id2
     if request.session['gen'] and request.session['lan']:
-        obj=Reads.objects.filter(genre=request.session['gen'], language=id)
+        obj=Reads.objects.filter(genre=request.session['gen'], language=id2)
     else:
-        obj=Reads.objects.filter(language=id)
+        obj=Reads.objects.filter(language=id2)
+
+    print(obj)
     gen=ReadGenre.objects.all()
     lan=language.objects.all()
     context={
@@ -86,7 +89,11 @@ def langcust(request, id):
     return render(request, 'book.html', context)
 
 
-
+# def langcust(request, cid):
+#     gener=Reads.objects.get(id=cid)
+#     lang=language.objects.filter(id=gener)
+#     context={'lang':lang}
+#     return render(request, 'book.html', context)
 
 
 

@@ -15,5 +15,6 @@ admin.site.register(ReadGenre, ReadGenreAdmin)
 
 class languageAdmin(admin.ModelAdmin):
      list_display = ['language']
+     # readonly_fields = ['language']
 admin.site.register(language, languageAdmin)
 

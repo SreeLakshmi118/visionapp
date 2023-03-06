@@ -8,8 +8,8 @@ urlpatterns = [
      path('register', views.register, name='register'),
      path('logout', views.logout, name='logout'),
      path('book', views.book, name='book'),
-     path('book/<int:id>', views.gencust, name='gencustomize'),
-     path('book/<int:id>', views.langcust, name='langcustomize'),
+     path('bookgen/<int:id1>', views.gencust, name='gencustomize'),
+     path('booklang/<int:id2>', views.langcust, name='langcustomize'),
    
 ]
 
