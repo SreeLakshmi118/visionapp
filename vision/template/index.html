@@ -22,6 +22,40 @@ Author URL: http://w3layouts.com
     <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" type="text/css" media="all">
 
     <script>
+
+        if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+        } else {
+        alert('Web Speech API is not supported');
+        }
+        const recognition = new window.webkitSpeechRecognition();
+
+        recognition.lang = 'en-US'; // Set the language for speech recognition
+        recognition.interimResults = false; // Specify whether interim results should be returned
+        recognition.maxAlternatives = 1; // Set the maximum number of speech recognition alternatives to return
+        recognition.addEventListener("result", handleRecognition);
+        recognition.start();
+        timeoutId = setTimeout(stopRecognition, 10000);
+        function stopRecognition() {
+        recognition.stop();
+        }
+        function handleRecognition(event) {
+            const speechToText = event.results[0][0].transcript;
+            data=speechToText.split('password')[0].trim();
+            passwd=speechToText.split('password is')[1].trim();
+            var password=passwd.split('validate')[0].trim()
+            var username = data.split('is')[1].trim();
+            document.getElementById('username').value = username;
+            document.getElementById('password').value = password;
+            
+            if (speechToText.includes('validate')) {
+                document.getElementById('submit').click();
+            }
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(stopRecognition, 10000);
+        }
+
+
+
         function bodyread(){
             // Create a new instance of SpeechSynthesisUtterance
             var utterance = new SpeechSynthesisUtterance();
@@ -35,38 +69,7 @@ Author URL: http://w3layouts.com
             // Start speaking the text
             window.speechSynthesis.speak(utterance);
         }
-        function speechusername() {
-            if (window.hasOwnProperty('webkitSpeechRecognition')) {
-                var recognition = new webkitSpeechRecognition();
-                recognition.continuous = false;
-                recognition.interimResults = false;
-                recognition.lang = "en-US";
-                recognition.start();
-                recognition.onresult = function(e) {
-                document.getElementById('username').value = e.results[0][0].transcript;
-                recognition.stop();
-                };
-                recognition.onerror = function(e) {
-                recognition.stop();
-                }
-            }
-            }
-        function speechpassword() {
-            if (window.hasOwnProperty('webkitSpeechRecognition')) {
-                var recognition = new webkitSpeechRecognition();
-                recognition.continuous = false;
-                recognition.interimResults = false;
-                recognition.lang = "en-US";
-                recognition.start();
-                recognition.onresult = function(e) {
-                document.getElementById('password').value = e.results[0][0].transcript;
-                recognition.stop();
-                };
-                recognition.onerror = function(e) {
-                recognition.stop();
-                }
-            }
-        }
+       
       </script>
 
 </head>
@@ -84,9 +87,10 @@ Author URL: http://w3layouts.com
                         <h2>Log In</h2>
                         <form action="{% url 'index' %}" method="post">
                             {% csrf_token %}
+                            <!-- <input type="text" name="" id="" placeholder="demo" > -->
                             <input type="text" id="username" class="text" name="uname" placeholder="User Name" onclick="speechusername()">
-                            <input type="text" id="password" class="password" name="password" placeholder="User Password" onclick="speechpassword()" >
-                            <button class="btn" type="submit">Log In</button>
+                            <input type="text" id="password" class="password" name="password" placeholder="User Password" onclick="speechpassword()" onmousemove="voice()">
+                            <button class="btn" type="submit" name="submit" id="submit">Log In</button>
                         </form>
                         
                         <p class="account">Don't have an account? <a href="{% url 'register' %}">Register</a></p>

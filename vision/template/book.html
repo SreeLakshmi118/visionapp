@@ -194,12 +194,21 @@
                 <source  src="{{s.audio.url}}" type="audio/ogg">
                 <!-- <source src="{{i.audio.url}}" type="audio/mpeg"> -->
                 </audio>
-                <button onclick="play('{{s.id}}')">Play</button>
+                <button onclick="playAudio('{{s.id}}')">Play</button>
                 <button onclick="pause('{{s.id}}')">Pause</button>
                 <button onclick="stop('{{s.id}}')">Stop</button>
                 <button onclick="resume('{{s.id}}')">Resume</button>
                 
                 <script>
+                  var currentAudio = null;
+                  function playAudio(audioId) {
+                    const audio = document.getElementById(audioId);
+                    if (currentAudio && !currentAudio.paused) {
+                      currentAudio.pause();
+                    }
+                    currentAudio = audio;
+                    audio.play();
+                  }
                   function play(id){
                     var audio = document.getElementById(id);
                     audio.play();
@@ -235,9 +244,6 @@
 
 
 
-  
-
-    
     
     <!-- loader begin -->
     <div class="loader-container">
