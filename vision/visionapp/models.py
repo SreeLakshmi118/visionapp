@@ -32,3 +32,28 @@ class language(models.Model):
     
     class Meta:
         default_permissions = ()
+
+class Question(models.Model):
+    question_text = models.CharField(max_length=200)
+    choice1 = models.CharField(max_length=200,default=True)
+    choice2 = models.CharField(max_length=200,default=True)
+    choice3 = models.CharField(max_length=200,default=True)
+    correct_answer = models.CharField(max_length=200, null=True)
+
+    def __str__(self):
+        return self.question_text 
+   
+ 
+    
+
+  
+
+class Answer(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    answer_text = models.CharField(max_length=200)
+    is_correct = models.BooleanField(default=False)
+
+
+    def __str__(self):
+        return self.answer_text
+

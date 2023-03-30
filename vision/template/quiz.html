@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Simple Quiz App</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'qstyle.css' %}">
+	<script>
+	function bodyread(){
+		// Create a new instance of SpeechSynthesisUtterance
+		var utterance = new SpeechSynthesisUtterance();
+
+		// Set the text to be spoken to the full content of the webpage
+		utterance.text = document.body.textContent;
+
+		// Set the language of the voice
+		utterance.lang = 'en-US';
+
+		// Start speaking the text
+		window.speechSynthesis.speak(utterance);
+	}
+   
+  </script>
+</head>
+<body onfocus="bodyread()">
+	<nav class="navbar">
+		<div class="navbar-container">
+			<a href="#" class="navbar-logo">Simple Quiz App</a>
+			<ul class="nav-menu">
+				<li><a href="{% url 'main' %}">Home</a></li>
+				<li><a href="{% url 'logout' %}">Logout</a></li>
+				<li><a href="{% url 'book' %}">Book</a></li>
+			</ul>
+		</div>
+	</nav>
+	
+	<div class="container">
+		<h1>Simple Quiz App</h1>
+		<form id="quiz-form" method="post" action="{% url 'quiz_results' %}">
+			{% csrf_token %}
+			{% for question in questions %}
+			<div class="question" data-correct-answer="{{ question.correct_answer }}">
+				<h3>{{ forloop.counter }}. {{ question.question_text }}</h3>
+				<label>
+					<input type="radio" name="question{{ question.id }}" value="{{ question.choice1 }}">
+					a) {{ question.choice1 }}
+				</label>
+				<label>
+					<input type="radio" name="question{{ question.id }}" value="{{ question.choice2 }}">
+					b) {{ question.choice2 }}
+				</label>
+				<label>
+					<input type="radio" name="question{{ question.id }}" value="{{ question.choice3 }}">
+					c) {{ question.choice3 }} 
+				</label>
+				<p class="correct-answer">Correct answer: {{ question.correct_answer }}</p>
+			</div>
+			{% endfor %}
+            <button type="submit" id="submit">Submit</button>
+        </form>
+    </div>
+	
+	
+	
+	<script src="{% static 'quiz.js' %}"></script>
+</body>
+</html>
