@@ -27,10 +27,14 @@
 		<div class="navbar-container">
 			<a href="#" class="navbar-logo">Simple Quiz App</a>
 			<ul class="nav-menu">
+				{% if user.is_authenticated %}
 				<li><a href="{% url 'main' %}">Home</a></li>
 				<li><a href="{% url 'logout' %}">Logout</a></li>
 				<li><a href="{% url 'book' %}">Book</a></li>
+				<a style="color: hsl(0, 4%, 5%); font-size: 100%;">Welcome Back {{request.user.username}}</a>
+				{% else %}
 			</ul>
+			{% endif %}
 		</div>
 	</nav>
 

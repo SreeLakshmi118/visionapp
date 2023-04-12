@@ -20,72 +20,12 @@ Author URL: http://w3layouts.com
     <!--//Style-CSS -->
 
     <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" type="text/css" media="all">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/annyang/2.6.1/annyang.min.js"></script>
 
-    <script>
-
-        if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
-        } else {
-        alert('Web Speech API is not supported');
-        }
-        const recognition = new window.webkitSpeechRecognition();
-
-        recognition.lang = 'en-US'; // Set the language for speech recognition
-        recognition.interimResults = false; // Specify whether interim results should be returned
-        recognition.maxAlternatives = 1; // Set the maximum number of speech recognition alternatives to return
-        recognition.addEventListener("result", handleRecognition);
-        recognition.start();
-        timeoutId = setTimeout(stopRecognition, 30000);
-        function stopRecognition() {
-        recognition.stop();
-        }
-        function handleRecognition(event) {
-
-            const speechToText = event.results[0][0].transcript;
-           
-            
-            var username=speechToText.split(' ')[2].trim();
-            
-            var password=speechToText.split(' ')[5].trim();
-            
-            var confirmpassword=speechToText.split(' ')[9].trim();
-            
-
-            document.getElementById('username').value = username;
-            document.getElementById('password').value = password;
-            document.getElementById('confirmpassword').value = confirmpassword;
-
-            if (speechToText.includes('validate')) {
-                document.getElementById('submit').click();
-            }
-            clearTimeout(timeoutId);
-            timeoutId = setTimeout(stopRecognition, 30000);
-            
-        }
-
-
-
-        function bodyread(){
-            // Create a new instance of SpeechSynthesisUtterance
-            var utterance = new SpeechSynthesisUtterance();
-
-            // Set the text to be spoken to the full content of the webpage
-            utterance.text = document.body.textContent;
-
-            // Set the language of the voice
-            utterance.lang = 'en-US';
-
-            // Start speaking the text
-            window.speechSynthesis.speak(utterance);
-        }
-       
-      </script>
 </head>
 
-<body onfocus="bodyread()">
+<body>
 
-
-
-    <!-- form section start -->
     <section class="w3l-hotair-form">
         <h1>Register Here!!!</h1>
         <div class="container">
@@ -94,7 +34,22 @@ Author URL: http://w3layouts.com
                 <div class="main-hotair">
                     <div class="content-wthree">
                         <h2>Register!!</h2>
-                        {% include 'alerts.html' %}
+                        {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert alert-danger" role="alert">
+                            <script>
+                                const speech = new SpeechSynthesisUtterance();
+                                speech.text = '{{ message }} try again with another username';
+                                window.speechSynthesis.speak(speech);
+                                // reload page after 5 seconds
+                                setTimeout(function() {
+                                    location.reload();
+                                }, 2000);
+
+                            </script>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
                         <form action="register" method="post">
                             {% csrf_token %}
                             <input type="text" class="text" name="uname" placeholder="User Name" id="username">
@@ -103,7 +58,7 @@ Author URL: http://w3layouts.com
                             <button class="btn" type="submit" name="submit" id="submit">Register</button>
                         </form>
                         
-                        <p class="account">Already have an account? <a href="{% url 'index' %}">Login</a></p>
+                        <p class="account">Already have an account? <a id="login" href="{% url 'index' %}">Login</a></p>
                     </div>
                     <div class="w3l_form align-self">
                         <div class="left_grid_info">
@@ -112,25 +67,72 @@ Author URL: http://w3layouts.com
                     </div>
                 </div>
             </div>
-            <!-- //form -->
         </div>
-        <!-- copyright-->
-       
-        <!-- //copyright-->
     </section>
     {% if messages %}
-
     {% for message in messages %}
-
     <div class="alert alert-danger" role="alert">
         {{ message }}
     </div>
     {% endfor %}
     {% endif %}
+    <script>
+        const speech = new SpeechSynthesisUtterance();
+        window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new window.SpeechRecognition();
+        annyang.addCommands({
+            'register': function() {
+              speech.text = 'Please say your username to get started.';
+              window.speechSynthesis.speak(speech);
+            },
+            'username is :username': function(username) {
+            speech.text = 'Your username is ' + username + '. Please say your password.';
+            document.getElementById('username').value = username;
+            window.speechSynthesis.speak(speech);
+            },
+            'password is :password': function(password) {
+            speech.text = 'Your password is ' + password + '. Please confirm your password by saying "confirm password" followed by your password.';
+            document.getElementById('password').value = password;
+            window.speechSynthesis.speak(speech);
+            },
+            'confirm password is :password': function(confirmpassword) {
+            document.getElementById('confirmpassword').value = confirmpassword;
+            if (confirmpassword === document.getElementById('password').value) {
+              speech.text = 'Your password is confirmed. Please say "submit" to complete the registration.';
+              window.speechSynthesis.speak(speech);
+            } else {
+              speech.text = 'Password does not match. Please say your password again.';
+              document.getElementById('password').value = '';
+              window.speechSynthesis.speak(speech);
+            }
+            },
+            'cancel':function(){
+                speech.text = 'Registration cancelled. Please say "register" to start the registration again.';
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+                document.getElementById('confirmpassword').value = '';
+                window.speechSynthesis.speak(speech);
+            },
+            'submit': function() {
+                speech.text = 'Submitting your registration. Please wait...';
+                document.getElementById('submit').click();
+                window.speechSynthesis.speak(speech);
 
-    <!-- //form section start -->
-    
-
+            },
+            'login': function() {
+                speech.text = 'Redirecting to login page. Please wait...';
+                document.getElementById('login').click();
+                window.speechSynthesis.speak(speech);
+            }
+        });
+        speech.text = 'Welcome to the registration page. Please say "register" to start the registration. Already have an account? Please say "login" to login. cancel to cancel the registration.';
+        window.speechSynthesis.speak(speech);
+        annyang.start();
+        recognition.start();
+        recognition.onresult = function(event) {
+          const speech = event.results[event.resultIndex][0].transcript;
+          annyang.trigger(speech);
+        };
+      </script>
 </body>
-
 </html>

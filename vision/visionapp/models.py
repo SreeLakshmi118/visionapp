@@ -2,7 +2,7 @@ from django.db import models
 
 # # Create your models here.
 class Reads(models.Model):
-    name = models.CharField(max_length=100 ,unique=True)
+    name = models.CharField(max_length=100 ,unique=True )
     author = models.CharField(max_length=100 ,unique=True)
     img = models.ImageField(upload_to='images/' ,unique=True)
     language = models.ForeignKey('language', on_delete=models.CASCADE)
@@ -49,7 +49,7 @@ class Question(models.Model):
   
 
 class Answer(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    question = models.OneToOneField(Question, on_delete=models.CASCADE)
     answer_text = models.CharField(max_length=200)
     is_correct = models.BooleanField(default=False)
 

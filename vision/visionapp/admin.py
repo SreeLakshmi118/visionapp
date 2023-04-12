@@ -1,8 +1,13 @@
+
 from django.contrib import admin
+from django.contrib.auth.models import Group
+
 
 from .models import Reads,ReadGenre,language,Question, Answer
 # Register your models here.
 # admin.site.register(Read)
+admin.site.unregister(Group)
+
 
 
 class ReadsAdmin(admin.ModelAdmin):
@@ -29,7 +34,7 @@ class QuestionAdmin(admin.ModelAdmin):
         (None, {'fields': ['question_text']}),
         ('Choices', {'fields': ['choice1', 'choice2', 'choice3']}),
     ]
-    inlines = [AnswerInline]
+    # inlines = [AnswerInline]
 
 
 admin.site.register(Question, QuestionAdmin)

@@ -15,10 +15,11 @@ import pyautogui
 
 
 def index(request):
-
     if request.method=='POST':
         uname=request.POST['uname']
         password=request.POST['password']
+        uname=uname.lower()
+        password=password.lower()
         user=auth.authenticate(username=uname, password=password)
 
         if user is not None:
@@ -31,9 +32,13 @@ def index(request):
 
 def register(request):
     if request.method=='POST':
+        print(request.POST)
         uname=request.POST['uname']
         password=request.POST['password']
         cpassword=request.POST['cpassword']
+        uname=uname.lower()
+        password=password.lower()
+        cpassword=cpassword.lower()
         if password==cpassword:
             if User.objects.filter(username=uname).exists():
                 messages.info(request, 'Username Taken')
@@ -52,10 +57,6 @@ def logout(request):
     return redirect('index')
 
 @login_required(login_url='index')
- 
-
-
-
 def book(request):
     if request.method == 'POST':
         r = sr.Recognizer()
@@ -152,7 +153,7 @@ def quiz_results(request):
         questions = Question.objects.all()
         for question in questions:
             selected_choice = request.POST.get('question'+str(question.id))
-            correct_answer = Answer.objects.get(question=question, is_correct=True)
+            correct_answer = Answer.objects.get(question=question)
             print(selected_choice)
             print(correct_answer)
             if selected_choice == correct_answer.answer_text:

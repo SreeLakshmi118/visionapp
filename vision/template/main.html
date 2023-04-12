@@ -45,8 +45,47 @@
       <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/annyang/2.6.1/annyang.min.js"></script>
+
+    <script>
+      const speech = new SpeechSynthesisUtterance();
+      window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognition = new window.SpeechRecognition();
+      annyang.addCommands({
+        'logout': function() {
+          speech.text = 'logouting';
+          document.getElementById('logout').click();
+          window.speechSynthesis.speak(speech);
+        },
+        'about':function(){
+         speech.text="loading about";
+         document.getElementById('about').click()
+         window.speechSynthesis.speak(speech)
+        },
+        'book':function(){
+         speech.text="loading book";
+         document.getElementById('book').click()
+         window.speechSynthesis.speak(speech)
+        },
+        'q':function(){
+         speech.text="loading quiz";
+         document.getElementById('quiz').click()
+         window.speechSynthesis.speak(speech)
+        }
+        
+      });
+      speech.text = 'Welcome to the home page. say logout for logout, about for about, book for read book and q for quiz section';
+      window.speechSynthesis.speak(speech);
+      annyang.start();
+      recognition.start();
+      recognition.onresult = function(event) {
+        const speech = event.results[event.resultIndex][0].transcript;
+        annyang.trigger(speech);
+      };
+    </script>
+
    </head>
-   <body onfocus="bodyread()">
+   <body>
    <!-- body -->
    <body class="main-layout">
       <!-- loader  -->
@@ -68,12 +107,16 @@
                      <div class="navbar-area">
                         <nav class="site-navbar">
                            <ul>
+                              {% if user.is_authenticated %}
                               <li><a class="active" href="{% url 'main' %}">Home</a></li>
-                              <li><a href="{% url 'about' %}">About</a></li>
-                              <li><a href="{% url 'logout' %}">Logout</a></li>
+                              <li><a id="about" href="{% url 'about' %}">About</a></li>
+                              <li><a id="logout" href="{% url 'logout' %}">Logout</a></li>
+                              <a style="color: hsl(0, 4%, 5%); font-size: 150%;">Welcome Back {{request.user.username}}</a>
+                              {% else %}
                              
                             
                            </ul>
+                           {% endif %}
                            <button class="nav-toggler">
                            <span></span>
                            </button>
@@ -97,8 +140,8 @@
                                     <h1>VISION <br>World </h1>
                                     <p>“Life is either a daring adventure or nothing at all.”
                                        ― Helen Keller,</p>
-                                    <a class="read_more" href="{% url 'book' %}">BOOK</a>
-                                    <a class="read_more" href="{% url 'quiz' %}">QUIZ</a>
+                                    <a id="book" class="read_more" href="{% url 'book' %}">BOOK</a>
+                                    <a id="quiz" class="read_more" href="{% url 'quiz' %}">QUIZ</a>
                                     
                                  </div>
                               </div>
@@ -203,6 +246,8 @@
          </div>
       </div>
       <!-- end about -->
+
+      
      
        
   
