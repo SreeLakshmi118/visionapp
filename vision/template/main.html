@@ -67,14 +67,14 @@
          document.getElementById('book').click()
          window.speechSynthesis.speak(speech)
         },
-        'q':function(){
+        'gk':function(){
          speech.text="loading quiz";
          document.getElementById('quiz').click()
          window.speechSynthesis.speak(speech)
         }
         
       });
-      speech.text = 'Welcome to the home page. say logout for logout, about for about, book for read book and q for quiz section';
+      speech.text = 'Welcome to the home page. say logout for logout, about for about, book for read book and gk for quiz section';
       window.speechSynthesis.speak(speech);
       annyang.start();
       recognition.start();

@@ -8,40 +8,52 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
     <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
     <link rel="stylesheet" href="{% static 'css/styleb.css.css' %}"/>
-    <title>Book Store</title>
-    <!-- <script>
-      if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
-        } else {
-        alert('Web Speech API is not supported');
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/annyang/2.6.1/annyang.min.js"></script>
+
+
+    <script>
+      const speech = new SpeechSynthesisUtterance();
+      window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognition = new window.SpeechRecognition();
+      annyang.addCommands({
+        'logout': function() {
+          speech.text = 'logouting';
+          document.getElementById('logout').click();
+          window.speechSynthesis.speak(speech);
+        },
+        'book':function(){
+         speech.text="gettings to book world";
+         document.getElementById('book').click()
+         window.speechSynthesis.speak(speech)
+        },
+        'home':function(){
+         speech.text="loading home page";
+         document.getElementById('home').click()
+         window.speechSynthesis.speak(speech)
+        },
+        
+        'gk':function(){
+         speech.text="loading quiz";
+         document.getElementById('quiz').click()
+         window.speechSynthesis.speak(speech)
         }
         
-        const recognition = new window.webkitSpeechRecognition();
-
-        recognition.lang = 'en-US'; // Set the language for speech recognition
-       
-        recognition.start();
-        
-        function stopRecognition() {
-        recognition.stop();
-        }
-      function bodyread(){
-            // Create a new instance of SpeechSynthesisUtterance
-            var utterance = new SpeechSynthesisUtterance();
-
-            // Set the text to be spoken to the full content of the webpage
-            utterance.text = document.body.textContent;
-
-            // Set the language of the voice
-            utterance.lang = 'en-US';
-
-            // Start speaking the text
-            window.speechSynthesis.speak(utterance);
-        }
+      });
+      speech.text = 'Welcome to the IRIS world of books. say logout for logout,book for books, home for home page and gk for quiz section';
+      window.speechSynthesis.speak(speech);
+      annyang.start();
+      recognition.start();
+      recognition.onresult = function(event) {
+        const speech = event.results[event.resultIndex][0].transcript;
+        annyang.trigger(speech);
+      };
     </script>
-     -->
+
+    <title>Book Store</title>
+   
     
   </head>
-  <!-- <body onfocus="bodyread()"> -->
+  
     <body>
     <!-- begin header section  -->
     <header class="header">
@@ -60,7 +72,7 @@
       <main class="header-2">
         <nav class="nav-bar">
           <a href="#home">Home</a>
-          <a href="#featured">Books</a>
+          <a  id="book" href="#featured">Books</a>
           <!-- <a href="#arrivals">categories</a> -->
 
           <!-- <select name="subject" multiple>
@@ -74,9 +86,9 @@
           
           {% if user.is_authenticated %}
 
-          <a href="{% url 'logout' %}">Logout</a>
-          <a href="{% url 'main' %}">Go to Home Page</a>
-          <a href="{% url 'quiz' %}">Quiz</a>
+          <a  id="logout" href="{% url 'logout' %}">Logout</a>
+          <a id="home" href="{% url 'main' %}">Go to Home Page</a>
+          <a id="q" href="{% url 'quiz' %}">Quiz</a>
 
           <a style="color: #fff;">Welcome Back {{request.user.username}}</a>
           {% else %}
@@ -271,33 +283,6 @@
       <!-- loader end -->
     <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
     <script src="{% static 'js/index.js' %}"></script>
-    <script src="js/annyang.min.js"></script>
-    <script>
-      if (annyang) {
-        // Let's define our first command. First the text we expect, and then the function it should call
-        var commands = {
-          'play audio': function() {
-           document.getElementById("playAudio('{{s.id}}')").play();
-          },
-          'pause audio': function() {
-           document.getElementById("pause('{{s.id}}')").pause();
-          },
-          'resume audio': function() {
-           document.getElementById("resume('{{s.id}}')").resume();
-          },
-          'stop audio': function() {
-           document.getElementById("stop('{{s.id}}')").stop();
-          }
-
-        };
-      
-        // Add our commands to annyang
-        annyang.addCommands(commands);
-      
-        // Start listening. You can call this here, or attach this call to an event, button, etc.
-        annyang.start();
-      }
-      </script>
-    
+   
   </body>
 </html>
