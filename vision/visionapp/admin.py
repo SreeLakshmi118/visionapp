@@ -1,10 +1,9 @@
 
 from django.contrib import admin
 from django.contrib.auth.models import Group
-
-
-from .models import Reads,ReadGenre,language,Question, Answer
+from .models import Reads, ReadGenre, language, QuizQuestion
 # Register your models here.
+
 # admin.site.register(Read)
 admin.site.unregister(Group)
 
@@ -23,19 +22,7 @@ class languageAdmin(admin.ModelAdmin):
      # readonly_fields = ['language']
 admin.site.register(language, languageAdmin)
 
+class QuizQuestionAdmin(admin.ModelAdmin):
+    list_display = ('question_text', 'choice1', 'choice2', 'choice3', 'correct_answer')
 
-class AnswerInline(admin.TabularInline):
-    model = Answer
-    extra = 3
-
-
-class QuestionAdmin(admin.ModelAdmin):
-    fieldsets = [
-        (None, {'fields': ['question_text']}),
-        ('Choices', {'fields': ['choice1', 'choice2', 'choice3']}),
-    ]
-    # inlines = [AnswerInline]
-
-
-admin.site.register(Question, QuestionAdmin)
-admin.site.register(Answer)
+admin.site.register(QuizQuestion, QuizQuestionAdmin)

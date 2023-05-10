@@ -7,47 +7,10 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/annyang/2.6.1/annyang.min.js"></script>
 
 
-    <script>
-      const speech = new SpeechSynthesisUtterance();
-      window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      const recognition = new window.SpeechRecognition();
-      annyang.addCommands({
-        'logout': function() {
-          speech.text = 'logouting';
-          document.getElementById('logout').click();
-          window.speechSynthesis.speak(speech);
-        },
-        'book':function(){
-         speech.text="gettings to book world";
-         document.getElementById('book').click()
-         window.speechSynthesis.speak(speech)
-        },
-        'home':function(){
-         speech.text="loading home page";
-         document.getElementById('home').click()
-         window.speechSynthesis.speak(speech)
-        },
-        
-        'q':function(){
-         speech.text="loading quiz";
-         document.getElementById('quiz').click()
-         window.speechSynthesis.speak(speech)
-        }
-        
-      });
-      speech.text = 'Welcome to the quiz ,lets get some general knowledge. say logout for logout,book for books, home for home page';
-      window.speechSynthesis.speak(speech);
-      annyang.start();
-      recognition.start();
-      recognition.onresult = function(event) {
-        const speech = event.results[event.resultIndex][0].transcript;
-        annyang.trigger(speech);
-      };
-    </script>
-	
+    
 </head>
 <body>
-	<nav class="navbar">
+  <nav class="navbar">
 		<div class="navbar-container">
 			<a href="#" class="navbar-logo">Simple Quiz App</a>
 			<ul class="nav-menu">
@@ -63,33 +26,125 @@
 	</nav>
 	
 	<div class="container">
-		<h1>Simple Quiz App</h1>
-		<form id="quiz-form" method="post" action="{% url 'quiz_results' %}">
-			{% csrf_token %}
-			{% for question in questions %}
-			<div class="question" data-correct-answer="{{ question.correct_answer }}">
-				<h3>{{ forloop.counter }}. {{ question.question_text }}</h3>
-				<label>
-					<input type="radio" name="question{{ question.id }}" value="{{ question.choice1 }}">
-					a) {{ question.choice1 }}
-				</label>
-				<label>
-					<input type="radio" name="question{{ question.id }}" value="{{ question.choice2 }}">
-					b) {{ question.choice2 }}
-				</label>
-				<label>
-					<input type="radio" name="question{{ question.id }}" value="{{ question.choice3 }}">
-					c) {{ question.choice3 }} 
-				</label>
-				<p class="correct-answer">Correct answer: {{ question.correct_answer }}</p>
-			</div>
-			{% endfor %}
-            <button type="submit" id="submit">Submit</button>
-        </form>
-    </div>
+    <h1>Quiz App</h1>
+    <form method="post" action="{% url 'quiz_results' %}">
+      {% csrf_token %}
+      {% for question in page_obj %}
+      <div class="question">
+        <h3 id="read">{{ question.question_text }}</h3>
+        <label>
+          <input id="a" type="radio" name="question{{ question.id }}" value="{{ question.choice1 }}" onclick="saveanswer('{{question.id}}','a')">
+          {{ question.choice1 }}
+        </label>
+        <label>
+          <input id="b" type="radio" name="question{{ question.id }}" value="{{ question.choice2 }}" onclick="saveanswer('{{question.id}}','b')">
+          {{ question.choice2 }}
+        </label>
+        <label>
+          <input id="c" type="radio" name="question{{ question.id }}" value="{{ question.choice3 }}" onclick="saveanswer('{{question.id}}','c')">
+          {{ question.choice3 }}
+        </label>
+      </div>
+      {% endfor %}
+      <div class="pagination">
+        {% if page_obj.has_previous %}
+        <a id="pre" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+        <span class="current-page">{{ page_obj.number }}</span>
+        {% if page_obj.has_next %}
+        <a id="next" href="?page={{ page_obj.next_page_number }}">Next</a>
+        {% else %}
+        <button id="submit" type="submit">Submit</button>
+        {% endif %}
+      </div>
+
+    </form>
+  </div>
 	
-	
-	
-	<script src="{% static 'quiz.js' %}"></script>
+    <script>
+        function saveanswer(a,b){
+          document.cookie = a + "=" + b;
+          
+          
+        }
+        const speech = new SpeechSynthesisUtterance();
+        window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new window.SpeechRecognition();
+        annyang.addCommands({
+          'read':function(){
+            speech.text='question is '+document.getElementById('read').innerHTML;
+            window.speechSynthesis.speak(speech)
+          },
+          
+          'select':function(){
+          speech.text = 'Option a is ' + document.getElementById('a').value + '. Option b is ' + document.getElementById('b').value + '. Option c is ' + document.getElementById('c').value + '.';
+          window.speechSynthesis.speak(speech)
+
+          },
+          'answer is *a':function(data){
+            data = data.toLowerCase();
+            if(data=='a'){
+                document.getElementById('a').checked=true;
+                speech.text='option a selected. say next to go to next question also say select for reselect the options';
+                window.speechSynthesis.speak(speech)
+            }
+            else if(data=='b'){
+                document.getElementById('b').checked=true;
+                speech.text='option b selected. say next to go to next question also say select for reselect the options';
+                window.speechSynthesis.speak(speech)
+            }
+            else if(data=='c'){
+                document.getElementById('c').checked=true;
+                speech.text='option c selected. say next to go to next question also say select for reselect the options';
+                window.speechSynthesis.speak(speech)
+            }
+            else{
+                speech.text='please say option followed by answer is your answer. for example say option a for option a';
+                window.speechSynthesis.speak(speech)
+            }
+            },
+          'next':function(){
+              if(document.getElementById('next').innerHTML=='Next'){
+                  document.getElementById('next').click();
+              }
+              else{
+                  speech.text='you are on last question say submit to submit your answers';
+                  window.speechSynthesis.speak(speech)
+              }
+              
+          },
+          'previous':function(){
+              if(document.getElementById('pre').innerHTML=='Previous'){
+                  document.getElementById('pre').click();
+              }
+              else{
+                  speech.text='you are on first question';
+                  window.speechSynthesis.speak(speech)
+              }
+              
+          },
+          'submit':function(){
+              if(document.getElementById('submit').innerHTML=='Submit'){
+                  document.getElementById('submit').click();
+              }
+              else{
+                  speech.text='you are not on last question say next to go to next question';
+                  window.speechSynthesis.speak(speech)
+              }
+              
+          },
+      
+        });
+  
+        speech.text = 'say r for read question and read to repeat question, select for options and repeat options';
+   
+        annyang.start();
+        recognition.start();
+        recognition.onresult = function(event) {
+          const speech = event.results[event.resultIndex][0].transcript;
+          annyang.trigger(speech);
+        };
+      </script>
+      
 </body>
 </html>

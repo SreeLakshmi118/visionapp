@@ -53,8 +53,8 @@ Author URL: http://w3layouts.com
                         <form action="register" method="post">
                             {% csrf_token %}
                             <input type="text" class="text" name="uname" placeholder="User Name" id="username">
-                            <input type="text" class="password" name="password" placeholder="User Password" id="password">
-                            <input type="text" class="password" name="cpassword" placeholder="confirm Password" id="confirmpassword">
+                            <input type="password" class="password" name="password" placeholder="User Password" id="password">
+                            <input type="password" class="password" name="cpassword" placeholder="confirm Password" id="confirmpassword">
                             <button class="btn" type="submit" name="submit" id="submit">Register</button>
                         </form>
                         
@@ -82,16 +82,16 @@ Author URL: http://w3layouts.com
         const recognition = new window.SpeechRecognition();
         annyang.addCommands({
             'register': function() {
-              speech.text = 'Please say your username to get started.';
+              speech.text = 'Please say your username by saying "username is" followed by username to get started.';
               window.speechSynthesis.speak(speech);
             },
             'username is :username': function(username) {
-            speech.text = 'Your username is ' + username + '. Please say your password.';
+            speech.text = 'Your username is ' + username + '. Please say your password by saying "password is" followed by your password.';
             document.getElementById('username').value = username;
             window.speechSynthesis.speak(speech);
             },
             'password is :password': function(password) {
-            speech.text = 'Your password is ' + password + '. Please confirm your password by saying "confirm password" followed by your password.';
+            speech.text = 'Your password is ' + password + '. Please confirm your password by saying "confirm password is" followed by your password.';
             document.getElementById('password').value = password;
             window.speechSynthesis.speak(speech);
             },

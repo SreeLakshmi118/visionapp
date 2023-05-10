@@ -1,7 +1,8 @@
 from django.contrib import messages, auth
+from django.core.paginator import Paginator
 from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
-from . models import Reads, ReadGenre, language, Question, Answer
+from . models import Reads, ReadGenre, language, QuizQuestion
 from django.contrib.auth.decorators import login_required
 
 from django.http import HttpResponse
@@ -9,6 +10,7 @@ from django.http import HttpResponse
 # Create your views here.
 import speech_recognition as sr
 import pyautogui
+from datetime import datetime, timedelta
 
 
 
@@ -139,47 +141,81 @@ def main(request):
 
 def about(request):
     return render(request, 'about.html')
+def quizview(request):
+    questions_list = QuizQuestion.objects.all()
+    paginator = Paginator(questions_list, 1)  
 
-def quiz(request):
-    questions = Question.objects.all()
-    context = {
-        'questions': questions,
-    }
-    return render(request, 'quiz.html', context)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'quiz.html', {'page_obj': page_obj})
+
+
+# def quiz_results(request):
+#     if request.method == 'POST':
+#         score = 0
+#         questions = QuizQuestion.objects.all()
+#         for question in questions:
+#             selected_choice = request.POST.get('question'+str(question.id))
+#             correct_answer = question.correct_answer
+#             if selected_choice == correct_answer:
+#                 score += 1
+#         total_questions = questions.count()
+#         percentage = (score/total_questions)*100
+
+#         context = {
+#             'score': score,
+#             'total_questions': total_questions,
+#             'percentage': percentage,
+#         }
+#         return render(request, 'quiz_results.html', context)
+#     else:
+#         return redirect('quiz')
 
 def quiz_results(request):
     if request.method == 'POST':
-        score = 0
-        questions = Question.objects.all()
+        score=0
+        cookie_dict = request.COOKIES
+        questions = QuizQuestion.objects.all()
         for question in questions:
-            selected_choice = request.POST.get('question'+str(question.id))
-            correct_answer = Answer.objects.get(question=question)
-            print(selected_choice)
-            print(correct_answer)
-            if selected_choice == correct_answer.answer_text:
-                score += 1
+            key = str(question.id)
+            value = cookie_dict.get(key)
+            print(key, value)
+            if value=='a':
+                if question.choice1==str(question.correct_answer):
+                    score+=1
+            elif value == 'b':
+                if question.choice2==str(question.correct_answer):
+                    score+=1
+            elif value =='c':
+                if question.choice3==str(question.correct_answer):
+                    score+=1
+            else:
+                pass
+            
         total_questions = questions.count()
         percentage = (score/total_questions)*100
 
-        data=Answer.objects.all()
-
+        response = HttpResponse("Cookies reset")
+        cookie_dict = request.COOKIES
+        for key, value in cookie_dict.items():
+            response.set_cookie(key, '',expires=(datetime.utcnow() - timedelta(days=1)))
         context = {
             'score': score,
             'total_questions': total_questions,
             'percentage': percentage,
-            'data':data
         }
         return render(request, 'quiz_results.html', context)
     else:
         return redirect('quiz')
-    
-def quiz_view(request):
-    questions = Question.objects.all()
-    for question in questions:
-        answers = Answer.objects.filter(question=question, is_correct=True)
-        if answers.exists():
-            question.correct_answer = answers.first().answer_text
-    context = {'questions': questions}
-    return render(request, 'quiz.html', context)
+            
 
+
+
+
+
+def quiz_view(request):
+    questions = QuizQuestion.objects.all()
+    context = {'questions': questions}
+    return render(request, 'start_quiz.html', context)
 

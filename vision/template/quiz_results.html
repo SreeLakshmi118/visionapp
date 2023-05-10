@@ -22,7 +22,7 @@
 	  
 	 </script>
 </head>
-<body onfocus="bodyread()">
+<body>
 	<nav class="navbar">
 		<div class="navbar-container">
 			<a href="#" class="navbar-logo">Simple Quiz App</a>
@@ -48,17 +48,22 @@
 	</div>
 
 	<div class="container">
-		{% for question in data %}
-			<div class="question" data-correct-answer="{{ question.correct_answer }}">
-				<h3>{{ forloop.counter }}. {{ question.question.question_text }}</h3>
-				<label>
-					<input type="radio" name="question{{ question.id }}" value="{{ question.choice1 }}">
-					{{ question.answer_text }}
-				</label>
-				
-			</div>
-		{% endfor %}
-	</div>
+		<h1>Quiz Results</h1>
+		<p>You scored {{ score }} out of {{ total }} questions</p>
+		<ul>
+		  {% for question, is_correct in results.items %}
+		  <li>
+			<strong>{{ question.question_text }}</strong><br>
+			{% if is_correct %}
+			<span class="correct">Your answer: {{ question.get_answer_display }} (Correct)</span>
+			{% else %}
+			<span class="incorrect">Your answer: {{ question.get_answer_display }} (Incorrect)</span><br>
+			<span class="correct">Correct answer: {{ question.correct_answer }}</span>
+			{% endif %}
+		  </li>
+		  {% endfor %}
+		</ul>
+	  </div>
 
 	
 </body>

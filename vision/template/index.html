@@ -39,7 +39,7 @@
                         <form id="login-form" action="{% url 'index' %}" method="post">
                             {% csrf_token %}
                             <input type="text" id="username" class="text" name="uname" placeholder="User Name">
-                            <input type="text" id="password" class="password" name="password" placeholder="User Password">
+                            <input type="password" id="password" class="password" name="password" placeholder="User Password">
                             <button class="btn" type="submit" name="submit" id="submit">Log In</button>
                         </form>
                         <p class="account">Don't have an account? <a id="register" href="{% url 'register' %}">Register</a></p>
@@ -68,7 +68,7 @@
             window.speechSynthesis.speak(speech);
           },
           'password is :password': function(password) {
-              speech.text = 'Your password is ' + password + '. Please say submit to register. cancel to cancel the login.';
+              speech.text = 'Your password is ' + password + '. Please say submit to login. cancel to cancel the login.';
             document.getElementById('password').value = password;
             window.speechSynthesis.speak(speech);
           },

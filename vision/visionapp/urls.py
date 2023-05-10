@@ -12,8 +12,10 @@ urlpatterns = [
      path('book', views.book, name='book'),
      path('bookgen/<int:id1>', views.gencust, name='gencustomize'),
      path('booklang/<int:id2>', views.langcust, name='langcustomize'),
-     path('quiz', views.quiz, name='quiz'),
+     path('quiz', views.quiz_view, name='quiz'),
      path('quiz_results/', views.quiz_results, name='quiz_results'),
+     path('quizview', views.quizview, name='quizview'),
+     
    
 ]
 
