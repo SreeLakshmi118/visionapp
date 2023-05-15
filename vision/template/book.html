@@ -12,6 +12,7 @@
 
 
     <script>
+      
       const speech = new SpeechSynthesisUtterance();
       window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       const recognition = new window.SpeechRecognition();
@@ -22,9 +23,30 @@
           window.speechSynthesis.speak(speech);
         },
         'book':function(){
-         speech.text="gettings to book world";
-         document.getElementById('book').click()
-         window.speechSynthesis.speak(speech)
+        //  clear the language and genre from session storage
+          if (sessionStorage.getItem('language')) {
+            sessionStorage.removeItem('language');
+          }
+          if (sessionStorage.getItem('genre')) {
+            sessionStorage.removeItem('genre');
+          }
+
+         speech.text="gettings to book world specify the genre and language followed by genre is x and language is y";
+         window.speechSynthesis.speak(speech);
+         speech.text="genres are";
+         window.speechSynthesis.speak(speech);
+         var genres = document.querySelectorAll('.genre');
+         genres.forEach(function(genre) {
+         var speech = new SpeechSynthesisUtterance(genre.innerHTML);
+         window.speechSynthesis.speak(speech);
+        });
+        speech.text="languages are";
+        window.speechSynthesis.speak(speech);
+        var languages = document.querySelectorAll('.language');
+        languages.forEach(function(language) {
+        var speech = new SpeechSynthesisUtterance(language.innerHTML);
+        window.speechSynthesis.speak(speech);
+        });
         },
         'home':function(){
          speech.text="loading home page";
@@ -36,10 +58,131 @@
          speech.text="loading quiz";
          document.getElementById('quiz').click()
          window.speechSynthesis.speak(speech)
+        },
+        'language is *y': function(y) {
+        y = y.toLowerCase();
+        var languages = document.querySelectorAll('.language');
+        var flag = false;
+        languages.forEach(function(language) {
+          if (language.innerHTML.toLowerCase() === y) {
+            flag = true;
+          }
+        });
+        if (flag) {
+          sessionStorage.setItem('language', y);
+          if (sessionStorage.getItem('genre')) {
+            var language = sessionStorage.getItem('language');
+            var genre = sessionStorage.getItem('genre');
+            speech.text = 'Loading books say list for list of books';
+            window.speechSynthesis.speak(speech);
+            const url = `/search/${encodeURIComponent(language)}/${encodeURIComponent(genre)}`;
+            window.location.href = url;
+          } else {
+            speech.text = 'Language selected, please say "type is x". For example, say "type is fiction".';
+            window.speechSynthesis.speak(speech);
+          }
+        } else {
+          speech.text = 'Please say "select language y". For example, say "select language English".';
+          window.speechSynthesis.speak(speech);
         }
-        
+      },
+      'type is *x': function(x) {
+        x = x.toLowerCase();
+        var genres = document.querySelectorAll('.genre');
+        var flag = false;
+        genres.forEach(function(genre) {
+          if (genre.innerHTML.toLowerCase() === x) {
+            flag = true;
+          }
+        });
+        if (flag) {
+          sessionStorage.setItem('genre', x);
+          if (sessionStorage.getItem('language')) {
+            var language = sessionStorage.getItem('language');
+            var genre = sessionStorage.getItem('genre');
+            speech.text = 'Loading books say list for list of books';
+            window.speechSynthesis.speak(speech);
+            const url = `/search/${encodeURIComponent(language)}/${encodeURIComponent(genre)}`;
+            window.location.href=url;
+          } else {
+            speech.text = 'Genre selected, please say "language is y". For example, say "language is English".';
+            window.speechSynthesis.speak(speech);
+          }
+        } else {
+          if (sessionStorage.getItem('language')) {
+            speech.text = 'Please say "type is x". For example, say "type is fiction".';
+            window.speechSynthesis.speak(speech);
+          } else {
+            speech.text = 'Please say "select language y". For example, say "select language English".';
+            window.speechSynthesis.speak(speech);
+          }
+        }
+      },
+      'list':function(){
+        speech.text="books are listed below say play followed by book name to play the book";
+         window.speechSynthesis.speak(speech);
+         speech.text="books are";
+         window.speechSynthesis.speak(speech);
+         var genres = document.querySelectorAll('.readbook');
+         genres.forEach(function(genre) {
+         var speech = new SpeechSynthesisUtterance(genre.innerHTML);
+         window.speechSynthesis.speak(speech);
       });
-      speech.text = 'Welcome to the IRIS world of books. say logout for logout,book for books, home for home page and gk for quiz section';
+
+    },
+    // 'play *x':function(x){
+    //   x = x.toLowerCase();
+      
+    //   var genres = document.querySelectorAll('.readbook');
+    //   var flag = false;
+    //   genres.forEach(function(genre) {
+    //     if (genre.innerHTML.toLowerCase() === x) {
+    //       flag = true;
+    //     }
+    //   });
+    //   if (flag) {
+    //     speech.text = 'Playing book';
+    //     window.speechSynthesis.speak(speech);
+    //     var books = document.querySelectorAll('.readbook');
+    //     books.forEach(function(book) {
+    //       if (book.innerHTML.toLowerCase() === x) {
+            
+    //         var booksData = document.getElementById("books-data").getAttribute("data-books");
+    //         var books = JSON.parse(booksData);
+    //         for (var i = 0; i < books.length; i++) {
+    //         if (books[i].name === x) {
+    //           bookId = books[i].id;
+    //           playAudio(bookId);
+    //           break;
+    //         }
+    //       }
+            
+    //       }
+    //     });
+    //   } else {
+    //     speech.text = 'Please say "play x". For example, say "play harry potter".';
+    //     window.speechSynthesis.speak(speech);
+    //   }
+    // },
+    // 'resume':function(){
+    //   speech.text="resuming";
+    //   window.speechSynthesis.speak(speech);
+    //   resume(sessionStorage.getItem('getid'));
+    // },
+    // 'pause':function(){
+    //   speech.text="pausing";
+    //   window.speechSynthesis.speak(speech);
+    //   pause(sessionStorage.getItem('getid'));
+    // },
+    // 'stop':function(){
+    //   speech.text="stopping";
+    //   window.speechSynthesis.speak(speech);
+    //   stop(sessionStorage.getItem('getid'));
+    // },
+
+      });
+        
+      speech.text = 'Welcome to the IRIS world of books. say logout for logout,book for books, home for home page and gk for quiz section, say book for accessing books';
       window.speechSynthesis.speak(speech);
       annyang.start();
       recognition.start();
@@ -59,30 +202,12 @@
     <header class="header">
       <main class="header-1">
         <a href="#" class="logo"> <i class="fas fa-book"></i>AUDIO BOOK STORE</a>
-        <form action="" class="search-form">
-          <input
-            type="search"
-            class="search-box"
-            placeholder="search for...."
-          />
-          <label for="search-box" class="fas fa-search"></label>
-        </form>
-      
       </main>
       <main class="header-2">
         <nav class="nav-bar">
           <a href="#home">Home</a>
           <a  id="book" href="#featured">Books</a>
-          <!-- <a href="#arrivals">categories</a> -->
 
-          <!-- <select name="subject" multiple>
-            <option >Math</option>
-            <option >English</option>
-            <option >Science</option>
-            <option >Biology</option>
-            </select> -->
-            
-          
           
           {% if user.is_authenticated %}
 
@@ -143,11 +268,6 @@
         </div>
       </main>
     </section>
-    <!-- home section end  -->
-
-
-    
-        <!-- reviews section starts  -->
 
         <section class="reviews" id="reviews">
           <h1 class="heading reviews-heading"><span>FIND YOURS...!!!</span></h1>
@@ -158,7 +278,7 @@
               <a href="{% url 'gencustomize' i.id %}">
                 <div class="swiper-slide box">
                   <img src="{{i.genimg.url}}" alt="" />
-                  <h3>{{i.genre}}</h3>
+                  <h3 class="genre">{{i.genre}}</h3>
                   <p>
                     {{i.gendesc}}
                   </p>
@@ -167,7 +287,6 @@
               </a>
               {% endfor %}
               
-               
               </div>
             </div>
           </div>
@@ -184,7 +303,7 @@
              
                 <div class="swiper-slide box">
                   <img src="{{j.langimg.url}}" alt="" />
-                  <h3>{{j.language}}</h3>
+                  <h3 class="language">{{j.language}}</h3>
                   <p>
                     {{j.langdesc}}
                   </p>
@@ -209,18 +328,13 @@
        
         {% for s in obj %}
         <div class="swiper-slide box">
-            <!-- <div class="icons">
-              <a href="#" class="fas fa-star"></a>
-              <a href="#" class="fas fa-heart"></a>
-              <a href="#" class="fas fa-shopping-cart"></a>
-            </div> -->
+            
             <div class="image">
               <img style="height: 200px;" src="{{s.img.url}}"/>
             </div>
             <div class="content">
-              <h3>{{s.name}}</h3>
+              <h3 class="readbook">{{s.name}}</h3>
               <div class="price">{{s.author}}</div>
-              
               <audio id="{{s.id}}" controls>
                 <source  src="{{s.audio.url}}" type="audio/ogg">
                 <!-- <source src="{{i.audio.url}}" type="audio/mpeg"> -->
@@ -233,6 +347,7 @@
                 <script>
                   var currentAudio = null;
                   function playAudio(audioId) {
+
                     const audio = document.getElementById(audioId);
                     if (currentAudio && !currentAudio.paused) {
                       currentAudio.pause();

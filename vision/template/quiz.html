@@ -18,7 +18,7 @@
 				<li><a id="home" href="{% url 'main' %}">Home</a></li>
 				<li><a id="logout" href="{% url 'logout' %}">Logout</a></li>
 				<li><a id="book" href="{% url 'book' %}">Book</a></li>
-				<a style="color: hsl(0, 4%, 5%); font-size: 100%;">Welcome Back {{request.user.username}}</a>
+				<a style="color: hsl(0, 20%, 95%); font-size: 110%;">Welcome Back {{request.user.username}}</a>
                 {% else %}
 			</ul>
 			{% endif %}
@@ -75,7 +75,21 @@
             speech.text='question is '+document.getElementById('read').innerHTML;
             window.speechSynthesis.speak(speech)
           },
-          
+          'logout': function() {
+          speech.text = 'logouting';
+          document.getElementById('logout').click();
+          window.speechSynthesis.speak(speech);
+        },
+        'book':function(){
+         speech.text="gettings to book world";
+         document.getElementById('book').click()
+         window.speechSynthesis.speak(speech)
+        },
+        'home':function(){
+         speech.text="loading home page";
+         document.getElementById('home').click()
+         window.speechSynthesis.speak(speech)
+        },
           'select':function(){
           speech.text = 'Option a is ' + document.getElementById('a').value + '. Option b is ' + document.getElementById('b').value + '. Option c is ' + document.getElementById('c').value + '.';
           window.speechSynthesis.speak(speech)
@@ -99,7 +113,7 @@
                 window.speechSynthesis.speak(speech)
             }
             else{
-                speech.text='please say option followed by answer is your answer. for example say option a for option a';
+                speech.text='please say option followed by answer is your answer. for example say answer is a';
                 window.speechSynthesis.speak(speech)
             }
             },
@@ -136,7 +150,7 @@
       
         });
   
-        speech.text = 'say r for read question and read to repeat question, select for options and repeat options';
+        speech.text = 'say read for read question and read to repeat question, select for options and repeat options';
    
         annyang.start();
         recognition.start();

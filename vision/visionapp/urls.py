@@ -15,6 +15,7 @@ urlpatterns = [
      path('quiz', views.quiz_view, name='quiz'),
      path('quiz_results/', views.quiz_results, name='quiz_results'),
      path('quizview', views.quizview, name='quizview'),
+     path('search/<str:lang>/<str:gen>/', views.search, name='search'),
      
    
 ]

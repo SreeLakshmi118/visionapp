@@ -1,5 +1,7 @@
-body {
-  background-color: #f2f2f2;
+ body {
+  background-image: url("https://img.freepik.com/free-vector/modern-question-mark-help-support-page_1017-27395.jpg?w=740&t=st=1684080138~exp=1684080738~hmac=b9deef3b56200fdfcf48816aa3dc13d17e7117435bea593709cbc2e13ecda293");
+  background-repeat: no-repeat;
+   background-size: cover;
 }
 
 .container {
@@ -16,23 +18,19 @@ h1 {
 }
 
 nav {
-  background-color: #333;
+  background-color: #bb9216;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
+ 
 }
 
 nav a {
   color: white;
   text-align: center;
   text-decoration: none;
-  padding: 10px 20px;
+  padding: 5px 5px;
   font-size: 16px;
-}
-
-nav a:hover {
-  background-color: #4CAF50;
 }
 
 .question {
@@ -60,7 +58,7 @@ nav a:hover {
 
 .pagination a,
 .pagination button {
-  background-color: #4CAF50;
+  background-color: #c4a117;
   border: none;
   color: white;
   padding: 10px 20px;
@@ -129,7 +127,7 @@ nav a:hover {
   }
 }
 
-@media screen and (max-width: 50px) {
+@media screen and (max-width: 30px) {
   nav.responsive {
     position: relative;
   }
@@ -142,4 +140,6 @@ nav a:hover {
     display: block;
     text-align: center;
   }
-}
+} 
+
+

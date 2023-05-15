@@ -3,24 +3,52 @@
 <html>
 <head>
 	<title>Quiz Results</title>
-	<link rel="stylesheet" type="text/css" href="{% static 'qstyle.css' %}">
-	<script>
+	<link rel="stylesheet" type="text/css" href="{% static 'r_style.css' %}">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/annyang/2.6.1/annyang.min.js"></script>
 
-		function bodyread(){
-		   // Create a new instance of SpeechSynthesisUtterance
-		   var utterance = new SpeechSynthesisUtterance();
-  
-		   // Set the text to be spoken to the full content of the webpage
-		   utterance.text = document.body.textContent;
-  
-		   // Set the language of the voice
-		   utterance.lang = 'en-US';
-  
-		   // Start speaking the text
-		   window.speechSynthesis.speak(utterance);
-	   }
-	  
-	 </script>
+
+    <script>
+      const speech = new SpeechSynthesisUtterance();
+      window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognition = new window.SpeechRecognition();
+      annyang.addCommands({
+        'logout': function() {
+          speech.text = 'logouting';
+          document.getElementById('logout').click();
+          window.speechSynthesis.speak(speech);
+        },
+        'book':function(){
+         speech.text="gettings to book world";
+         document.getElementById('book').click()
+         window.speechSynthesis.speak(speech)
+        },
+        'home':function(){
+         speech.text="loading home page";
+         document.getElementById('home').click()
+         window.speechSynthesis.speak(speech)
+        },
+        'results':function(){
+        speech.text="You scored {{ score }} out of {{ total_questions }}. Retake Quiz by saying Begin";
+        window.speechSynthesis.speak(speech)
+		},
+
+        
+        'begin':function(){
+          speech.text="starting quiz, quiz will consist of 5 questions, say next to next question, say previous for previous question, say skip for skip question, questions will display one by one, say read for read question and repeat to repeat question, best of luck";
+          document.getElementById('submit').click()
+          window.speechSynthesis.speak(speech)
+        }
+        
+      });
+      speech.text = 'Welcome to the Quiz Result of you . say logout for logout,book for books, home for home page,results to hear your result';
+      window.speechSynthesis.speak(speech);
+      annyang.start();
+      recognition.start();
+      recognition.onresult = function(event) {
+        const speech = event.results[event.resultIndex][0].transcript;
+        annyang.trigger(speech);
+      };
+    </script>
 </head>
 <body>
 	<nav class="navbar">
@@ -28,10 +56,10 @@
 			<a href="#" class="navbar-logo">Simple Quiz App</a>
 			<ul class="nav-menu">
 				{% if user.is_authenticated %}
-				<li><a href="{% url 'main' %}">Home</a></li>
-				<li><a href="{% url 'logout' %}">Logout</a></li>
-				<li><a href="{% url 'book' %}">Book</a></li>
-				<a style="color: hsl(0, 4%, 5%); font-size: 100%;">Welcome Back {{request.user.username}}</a>
+				<li><a id="home" href="{% url 'main' %}">Home</a></li>
+				<li><a id="logout" href="{% url 'logout' %}">Logout</a></li>
+				<li><a id="book" href="{% url 'book' %}">Book</a></li>
+				<a style="color: hsl(0, 11%, 95%); font-size: 110%;">Welcome Back {{request.user.username}}</a>
 				{% else %}
 			</ul>
 			{% endif %}
@@ -63,6 +91,8 @@
 		  </li>
 		  {% endfor %}
 		</ul>
+	
+	
 	  </div>
 
 	

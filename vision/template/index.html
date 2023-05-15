@@ -23,7 +23,9 @@
                         {% for message in messages %}
                         <div class="alert alert-danger" role="alert">
                             <script>
+                                const voices = window.speechSynthesis.getVoices();
                                 const speech = new SpeechSynthesisUtterance();
+                                speech.voice = voices[1];
                                 speech.text = '{{ message }} try again with another credentials';
                                 window.speechSynthesis.speak(speech);
                                 // reload page after 5 seconds

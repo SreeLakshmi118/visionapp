@@ -1,0 +1,101 @@
+body {
+    background-image: url("https://img.freepik.com/free-vector/curiosity-search-concept-illustration_114360-11031.jpg?w=740&t=st=1684082252~exp=1684082852~hmac=5dc5d986d5de4b22ca4dd4d3ba157e9acd1a06427bcc16ea5cf3f28749d744f4");
+    background-size: cover;
+    font-family: Arial, sans-serif;
+}
+
+.navbar {
+    background-color: #806565;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.navbar-logo {
+    color: #fff;
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-menu li {
+    margin-right: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    text-align: center;
+}
+
+.container h1 {
+    margin-top: 0;
+}
+
+.container p {
+    font-size: 24px;
+}
+
+.container button {
+    background-color: #4c7daf;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.container button:hover {
+    background-color: #4c7daf;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    margin: 20px 0;
+    text-align: left;
+}
+
+strong {
+    font-size: 20px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.correct {
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.incorrect {
+    color: #F44336;
+    font-weight: bold;
+}
